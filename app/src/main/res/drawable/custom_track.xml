@@ -1,0 +1,16 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#247dff" />  <!-- 选中时的颜色 -->
+            <corners android:radius="20dp" />    <!-- 圆角半径 -->
+            <size android:height="20dp" />       <!-- 轨道高度 -->
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#535353" />  <!-- 未选中时的颜色 -->
+            <corners android:radius="20dp" />    <!-- 圆角半径 -->
+            <size android:height="20dp" />       <!-- 轨道高度 -->
+        </shape>
+    </item>
+</selector>
