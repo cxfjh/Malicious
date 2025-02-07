@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.loudspeaker;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -22,7 +22,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     };
 
 
-    // // 注册广播接收器
+    // 注册广播接收器
     public void register(final Context context) {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);

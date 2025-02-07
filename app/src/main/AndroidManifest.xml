@@ -10,9 +10,11 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <!-- 5. BLUETOOTH：允许应用使用蓝牙（如连接蓝牙设备）-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- 6. POST_NOTIFICATIONS：允许应用发送通知（如显示通知栏消息）-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name="com.example.utils.LifecycleManager"
+        android:name="com.example.service.LifecycleManager"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -35,6 +37,6 @@
         </activity>
 
         <!-- MusicService服务 -->
-        <service android:name="com.example.utils.MusicService"/>
+        <service android:name="com.example.service.MusicService"/>
     </application>
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.service;
 
 import android.app.Activity;
 import android.app.Application;
@@ -52,7 +52,7 @@ public class LifecycleManager extends Application {
                 countActivity--;
                 if (countActivity <= 0 && !isBackground) {
                     isBackground = true;
-                    if (Settings.canDrawOverlays(context) && MainActivity.OperationalStatus) openApp(); // 检查悬浮窗权限并打开应用
+                    if (Settings.canDrawOverlays(context)) openApp(); // 检查悬浮窗权限并打开应用
                 };
             };
         });

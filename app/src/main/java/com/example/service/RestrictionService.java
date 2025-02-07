@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.service;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -6,9 +6,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
+
 import androidx.core.app.NotificationCompat;
+
 import com.example.malicious.R;
 
 
@@ -18,11 +19,9 @@ public class RestrictionService extends Service {
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         // 创建通知渠道
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("channel_id", "Restriction Service", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        };
+        NotificationChannel channel = new NotificationChannel("channel_id", "Restriction Service", NotificationManager.IMPORTANCE_HIGH);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
 
         // 显示通知
         final Notification notification = new NotificationCompat.Builder(this, "channel_id")
