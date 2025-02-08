@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
-    <!-- 1. SYSTEM_ALERT_WINDOW：允许应用显示悬浮窗（覆盖其他应用）-->
+    <!-- 悬浮窗权限，允许应用在其他应用之上显示窗口，如悬浮球等。从 Android 6.0（API 级别 23）开始需要动态请求此权限。 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- 2. FOREGROUND_SERVICE：允许应用运行前台服务（在通知栏显示持续运行的服务）-->
+
+    <!-- 前台服务权限，允许应用在前台运行服务，避免被系统轻易杀死。从 Android 8.0（API 级别 26）开始，启动长时间运行的服务需要使用前台服务。 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- 3. WRITE_SETTINGS：允许应用修改系统设置（如屏幕超时时间）-->
+
+    <!-- 修改系统设置权限，允许应用修改系统的全局设置。从 Android 6.0（API 级别 23）开始需要用户手动授予此权限。 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <!-- 4. MODIFY_AUDIO_SETTINGS：允许应用修改音频设置（如音量、铃声模式）-->
+
+    <!-- 修改音频设置权限，允许应用修改音频相关的设置，如音量、音频输出设备等。 -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <!-- 5. BLUETOOTH：允许应用使用蓝牙（如连接蓝牙设备）-->
+
+    <!-- 蓝牙权限，允许应用使用蓝牙功能，如搜索蓝牙设备、连接蓝牙设备等。 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <!-- 6. POST_NOTIFICATIONS：允许应用发送通知（如显示通知栏消息）-->
+
+    <!-- 发送通知权限，从 Android 13（API 级别 33）开始需要动态请求此权限，以允许应用发送通知。 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- 前台媒体播放服务权限，允许应用在前台播放媒体时使用服务，避免被系统杀死。从 Android 13（API 级别 33）开始引入。 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- 系统覆盖窗口权限，与 SYSTEM_ALERT_WINDOW 类似，用于在其他应用之上显示窗口。 -->
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
 
     <application
         android:name="com.example.service.LifecycleManager"
@@ -37,6 +49,18 @@
         </activity>
 
         <!-- MusicService服务 -->
-        <service android:name="com.example.service.MusicService"/>
+        <service
+            android:name="com.example.service.MusicService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ForegroundServicePermission" />
+
+        <service
+            android:name="com.example.service.RestrictionService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ForegroundServicePermission" />
     </application>
 </manifest>
